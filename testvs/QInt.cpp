@@ -15,7 +15,7 @@ void QInt::ScanQInt(string s)
 		for (int i = 0; i < 32; i++) {
 			temp[i] = bits[i + 32 * j];
 		}
-		num[j] = convertBinArrayToDex(temp);
+		num[j] = convertBinArrayToDex(temp, 32);
 	}
 }
 
@@ -57,6 +57,7 @@ QInt QInt::operator + (QInt b) {
 		else m = 0;
 	}
 	sum = BinToDec(c);
+	delete []b1;
 	return 	sum;
 }
 
@@ -68,6 +69,12 @@ QInt QInt::operator + (QInt b) {
 
 
 
+QInt& QInt::operator=(const QInt& other) {
+	for (int i = 0; i < 4; i++) {
+		this->num[i] = other.num[i];
+	}
+	return *this;
+}
 
 
 //CONVERT FUNCTIONS

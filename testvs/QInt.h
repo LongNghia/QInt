@@ -1,13 +1,14 @@
-﻿#pragma once
-
+﻿#ifndef _QINT_H_
+#define _QINT_H_
 #include <iostream>
 #include <string>
+
 
 using namespace std;
 
 class QInt
 {
-public:
+private:
 	int num[4];
 
 	//--CONSTRUCTOR-DESTRUCTOR
@@ -31,16 +32,21 @@ public:
 
 	//CONVERT
 public:
-	bool* DecToBin();
-	QInt BinToDec(bool* bit);
-	char* BinToHex(bool* bit);
-	char* DecToHex(QInt x);
+	
+	 bool* DecToBin();
+	 QInt BinToDec(bool* bit);
+	 char* BinToHex(bool* bit);
+	 char* DecToHex(QInt x);
 
 	//OPERATOR + - * /
 public:
 	QInt operator + (QInt b);
 
 	//QInt operater - (Qint b);
+
+
+	//----OPERATOR =
+	QInt& operator=(const QInt& other);
 
 };
 
@@ -51,7 +57,7 @@ public:
 
 
 
-
+#endif
 
 
 

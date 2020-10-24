@@ -1,53 +1,107 @@
-﻿#include "QInt.h"
+﻿#include"utils.h"
+#include "QInt.h"
+
+//cout << SubTwoIntString("12321", "9099");=32222
+
+//string SubTwoIntString(string num1, string num2) {
+//
+//	string result = "";
+//	int reminder = 0;
+//	int pointerNum1 = num1.length() - 1;
+//	int pointerNum2 = num2.length() - 1;
+//	int sub = 0;
+//	for (int i = 0; i < pointerNum1 - pointerNum2; i++) {
+//		num2 = '0' + num2;
+//	}
+//	cout << "\ns1=" << num1 << endl;
+//	cout << "\ns2=" << num2 << endl;
+//
+//	bool first = false;
+//	int temp = 0;
+//	while(te)
+//	while (pointerNum1) {
+//		//if (pointerNum2 < 0)
+//
+//		if (num1[pointerNum1] < num2[pointerNum2] + reminder) {
+//			reminder = 1;
+//		}
+//		else {
+//
+//			reminder = 0;
+//
+//		}
+//		sub = num1[pointerNum1] + 10 * reminder - num2[pointerNum2];
+//
+//
+//		pointerNum1--;
+//		pointerNum2--;
+//		result += sub + '0';
+//		cout << "res=" << sub << "\n";
+//	}
+//
+//	return result;
+//}
 
 
 int main() {
 	//
-	QInt q;
-	cout << "nhap chuoi: ";
+	//truong hop -0
+	//QInt q;
+	//cout << "nhap chuoi: ";
 
-	string s;
-	getline(cin, s);
-	cout << "\nxuat chuoi: \n";
-	q.ScanQInt(s);
+	//string s;
+	//getline(cin, s);
+	//cout << "\nxuat chuoi: \n";
+	//q.ScanQInt(s);
+	//q.PrintQInt();
+
+	//QInt q("12345");
+	//QInt p("65432");
+	//p.PrintQInt();
+	//q.PrintQInt();
+
+	//QInt c = q;
+	//c.PrintQInt();
+
+
+	////phép cộng chạy chưa đúng!!!
+	//QInt Sum = q + p;
+	//Sum.PrintQInt();
+
+
+	///-----TEST Ở ĐÂY
+
+
+	//cout<<AddTwoIntString("123456789123456789", "123165135132155");
+
+
+	QInt q ("123456");
 	q.PrintQInt();
 
+	
 
-	QInt Sum("1231651");
-	Sum.PrintQInt();
-	
-	
-	///-----TEST Ở ĐÂY
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//-----------------
-	
-	
+
+
 
 
 
@@ -218,6 +272,6 @@ int main() {
 	//cout << "ket qua"<< convertBinArrayToDex(bits);
 
 
-return 0;
+	return 0;
 }
 
