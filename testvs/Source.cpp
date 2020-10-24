@@ -55,30 +55,35 @@ int main() {
 	//q.ScanQInt(s);
 	//q.PrintQInt();
 
-	//QInt q("12345");
-	//QInt p("65432");
+	QInt q("6543");
+	QInt p("9999");
 	//p.PrintQInt();
-	//q.PrintQInt();
-
-	//QInt c = q;
-	//c.PrintQInt();
+	q.PrintQInt();
 
 
-	////phép cộng chạy chưa đúng!!!
-	//QInt Sum = q + p;
-	//Sum.PrintQInt();
-
+	//phép cộng chạy chưa đúng!!!
+	QInt Sum = q - p;
+	Sum.PrintQInt();
+	
 
 	///-----TEST Ở ĐÂY
 
 
 	//cout<<AddTwoIntString("123456789123456789", "123165135132155");
 
+	//QInt q("123456");
+	//bool* bits = QInt::DecToBin(q);
 
-	QInt q ("123456");
-	q.PrintQInt();
 
-	
+
+	//for (int i = 0; i < 128; i++) {
+	//	cout << bits[i] << "";
+	//}
+
+	//cout << endl;
+
+	//QInt p = QInt::BinToDec(bits);
+	//p.PrintQInt();
 
 
 

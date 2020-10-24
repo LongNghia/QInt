@@ -33,21 +33,32 @@ public:
 	//CONVERT
 public:
 	
-	 bool* DecToBin();
-	 QInt BinToDec(bool* bit);
-	 char* BinToHex(bool* bit);
-	 char* DecToHex(QInt x);
+	 static bool* DecToBin(QInt x);
+	 static QInt BinToDec(bool* bit);
+	 static char* BinToHex(bool* bit);
+	 static char* DecToHex(QInt x);
 
 	//OPERATOR + - * /
 public:
 	QInt operator + (QInt b);
+	QInt operator - (QInt b);
+	QInt operator * (QInt b);
 
-	//QInt operater - (Qint b);
 
 
 	//----OPERATOR =
 	QInt& operator=(const QInt& other);
 
+	// ------TEST
+public:
+	void tobin() {
+		bool *b = DecToBin(*this);
+
+		for (int i = 0; i < 128; i++) {
+			cout << b[i] << "";
+		}
+		delete[]b;
+	}
 };
 
 

@@ -39,34 +39,66 @@ void QInt::PrintQInt()
 }
 
 
-
+//TOÁN TỬ CỘNG
 QInt QInt::operator + (QInt b) {
-	bool* b1 = this->DecToBin();
-	bool* b2 = b.DecToBin(), m = 0;
+	bool* b1 = DecToBin(*this);
+	bool* b2 = DecToBin(b);
+
+
+	bool m = 0;
 	bool c[128];
 	QInt sum;
-	for (int i = 127; i >= 0; i--)
-	{
-		bool k = (b1[i] ^ b2[i]) ^ m;
-		c[i] = k;
-		if (k == 0)
-			if (b1[i] == b2[i])
-				m = b1[i];
-			else
-				m = 1;
-		else m = 0;
+	int remider = 0;
+	int s = 0;
+	for (int i = 127; i >= 0; i--) {
+		s = b1[i] + b2[i] + remider;
+		if (s == 2) {
+			remider = 1;
+			s = 0;
+		}
+		else if (s == 3) {
+			remider = 1;
+			s = 1;
+		}
+		else  {
+			remider = 0;
+		}
+		c[i] = s;
 	}
+	//xuat
+	//cout << endl;
+
+	//for (int i = 0; i < 128; i++) {
+	//	cout << c[i] << "";
+	//}
+	//cout << endl;
+
 	sum = BinToDec(c);
-	delete []b1;
+	delete[]b1;
 	return 	sum;
 }
 
+//TOÁN TỬ TRỪ
+QInt QInt::operator- (QInt b)
+{
+	//if (b < *this) {
 
-//QInt QInt::operater - (Qint b)
-//{
-//	return *this + (-b);
+	//}
+	bool *bits = DecToBin(b);
+	bu2(bits);
+	b.PrintQInt();
+	QInt temp;
+	temp = BinToDec(bits);
+	temp.PrintQInt();
+	delete []bits;
+
+	return *this + temp;
+}
+
+//TOÁN TỬ NHÂN
+//QInt operator * (QInt b) {
+//	return *this;
 //}
-
 
 
 QInt& QInt::operator=(const QInt& other) {
@@ -80,12 +112,11 @@ QInt& QInt::operator=(const QInt& other) {
 //CONVERT FUNCTIONS
 
 //Chuyển đổi từ hệ 2 -> 10
-bool* QInt::DecToBin() {
+bool* QInt::DecToBin(QInt q) {
 	bool* b = new bool[128];
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 32; j++) {
-			b[j + i * 32] = (this->num[i] >> (31 - j)) & 1;
-			/*cout << b[j + i * 32];*/
+			b[j + i * 32] = (q.num[i] >> (31 - j)) & 1;
 		}
 	return b;
 }
@@ -166,7 +197,7 @@ char* QInt::BinToHex(bool* bit) {
 
 //Chuyển đổi từ 10 -> 16
 char* QInt::DecToHex(QInt x) {
-	bool* b = x.DecToBin();
+	bool* b = DecToBin(x);
 	char* s = BinToHex(b);
 	return s;
 }
