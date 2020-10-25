@@ -19,23 +19,24 @@ void QInt::ScanQInt(string s)
 	}
 }
 
-
 //Hàm xuất
 void QInt::PrintQInt()
 {
-	string sbits = "";
-	string res = "";
-	string temp = "";
-	bool bits[128] = { 0 };
+	//string sbits = "";
+	//string res = "";
+	//string temp = "";
+	//bool bits[128] = { 0 };
 
-	//cout << endl;
-	for (int i = 0; i < 4; i++) {
-		temp = dexToBin(num[i]);
-		sbits += temp.substr(96);
-	}
-	//cout << sbits << endl;
-	bitsintStringToBitsArray(sbits, bits);
-	cout << bitsToDex(bits) << endl;
+	////cout << endl;
+	//for (int i = 0; i < 4; i++) {
+	//	temp = dexToBin(num[i]);
+	//	sbits += temp.substr(96);
+	//}
+	////cout << sbits << endl;
+	//bitsintStringToBitsArray(sbits, bits);
+	//cout << bitsToDex(bits) << endl;
+
+	cout << this->toString() << endl;
 }
 
 
@@ -60,7 +61,7 @@ QInt QInt::operator + (QInt b) {
 			remider = 1;
 			s = 1;
 		}
-		else  {
+		else {
 			remider = 0;
 		}
 		c[i] = s;
@@ -90,15 +91,52 @@ QInt QInt::operator- (QInt b)
 	QInt temp;
 	temp = BinToDec(bits);
 	temp.PrintQInt();
-	delete []bits;
+	delete[]bits;
 
 	return *this + temp;
 }
 
 //TOÁN TỬ NHÂN
-//QInt operator * (QInt b) {
-//	return *this;
-//}
+QInt QInt::operator * (QInt b) {
+	//!!kiểm tra dấu
+
+
+
+	bool sign = this->isNegative() ^ b.isNegative();
+
+
+	string num1 = this->toString();
+	string num2 = b.toString();
+
+	num1 = this->isNegative() ? num1.substr(1) : num1;
+	num2 = b.isNegative() ? num1.substr(1) : num2;
+
+
+	int blength = num2.size();
+
+
+	string resMulEach = "";
+	string res = "";
+	string pairSum = "";
+	
+	int i = blength - 1;
+	while (i >= 0) {
+		resMulEach = multifyIntStringWithChar(num1, num2[i]);
+
+		for (int j = 0; j < blength - i - 1; j++) {
+
+			resMulEach += '0';
+		}
+		//cout << resMulEach << endl;
+		res = AddTwoIntString(res, resMulEach);
+		//cout << "char:\n" << res;
+		i--;
+	}
+
+	res = sign ? '-' + res : res;
+	QInt num3(res);
+	return num3;
+}
 
 
 QInt& QInt::operator=(const QInt& other) {
@@ -111,7 +149,7 @@ QInt& QInt::operator=(const QInt& other) {
 
 //CONVERT FUNCTIONS
 
-//Chuyển đổi từ hệ 2 -> 10
+//Chuyển đổi từ hệ 10 -> 2
 bool* QInt::DecToBin(QInt q) {
 	bool* b = new bool[128];
 	for (int i = 0; i < 4; i++)
@@ -121,7 +159,7 @@ bool* QInt::DecToBin(QInt q) {
 	return b;
 }
 
-//Chuyển đổi từ 10 -> 2
+//Chuyển đổi từ 2 -> 10
 QInt QInt::BinToDec(bool* bit) {
 	QInt q;
 	for (int i = 0; i < 4; i++)
@@ -202,3 +240,43 @@ char* QInt::DecToHex(QInt x) {
 	return s;
 }
 
+// 123 --> "1111011"
+string QInt::shortBin(int nbit) {
+	string res = "";
+
+	bool *bits;
+	bits = DecToBin(*this);
+	res = bitsArrayToBitsString(bits);
+	res = removeHeadZero(res);
+	while (res.size() < nbit) {
+		res = '0' + res;
+	}
+
+	delete[]bits;
+	return res;
+
+}
+
+
+string QInt::toString() {
+	string sbits = "";
+	string res = "";
+	string temp = "";
+	bool bits[128] = { 0 };
+
+	//cout << endl;
+	for (int i = 0; i < 4; i++) {
+		temp = dexToBin(num[i]);
+		sbits += temp.substr(96);
+	}
+	//cout << sbits << endl;
+	bitsintStringToBitsArray(sbits, bits);
+	return bitsToDex(bits);
+}
+
+
+//Kiểm tra một chuỗi ký tự số có âm không
+//VD "-123456"
+bool QInt::isNegative() {
+	return this->num[0]<0;
+}

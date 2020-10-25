@@ -24,6 +24,15 @@ public:
 			num[i] = numArray[i];
 		}
 	}
+	//--GETTER
+public:
+	int* getNum() {
+		int* num = new int[4];
+		for (int i = 0; i < 4; i++) {
+			num[i] = this->num[i];
+		}
+		return num;
+	}
 
 	//--NHẬP-XUẤT
 public:
@@ -59,6 +68,14 @@ public:
 		}
 		delete[]b;
 	}
+
+	string toString();
+	bool isNegative();
+
+	//------FUNCTIONAL
+public:
+	string shortBin(int nbis = 0);
+
 };
 
 

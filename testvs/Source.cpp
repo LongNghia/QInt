@@ -1,5 +1,6 @@
 ﻿#include"utils.h"
 #include "QInt.h"
+#include "Qfloat.h"
 
 //cout << SubTwoIntString("12321", "9099");=32222
 
@@ -55,18 +56,43 @@ int main() {
 	//q.ScanQInt(s);
 	//q.PrintQInt();
 
-	QInt q("6543");
-	QInt p("9999");
+	//QInt q("65432131321321321");
+	//QInt p("9999999999999999");
 	//p.PrintQInt();
-	q.PrintQInt();
+	//q.PrintQInt();
 
 
 	//phép cộng chạy chưa đúng!!!
-	QInt Sum = q - p;
+	//QInt Sum = q - p;
+	//Sum.PrintQInt();
+
+	//TEST QFLOAT
+
+	//string s = "132123123123.465321321321";
+	//Qfloat q;
+	//q.ScanQfloat(s);
+	//q.PrintQfloat();
+
+
+	//Toán tử nhân
+	QInt q("-123456789");
+	QInt p("910111213");
+	q.PrintQInt();
+	p.PrintQInt();
+
+	//cout << q.isNegative() << endl;
+	//cout << p.isNegative() << endl;
+
+
+	QInt Sum = q * p;
 	Sum.PrintQInt();
-	
+
+	/////////////
 
 	///-----TEST Ở ĐÂY
+
+	//multifyIntStringWithChar
+	//cout << multifyIntStringWithChar("9999", '0');
 
 
 	//cout<<AddTwoIntString("123456789123456789", "123165135132155");
@@ -108,7 +134,9 @@ int main() {
 
 
 
-
+	//bitsArraytodex
+	//bool bits[8] = { 0,1,1,0,1,1,0,1 };
+	//cout << convertBinArrayToDex(bits, 8);
 
 	//dex to bin string
 //	int num = 123;

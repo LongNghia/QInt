@@ -18,10 +18,10 @@ int stringToInt(string s) {
 }
 
 // dua mang bits ve dang bu 2
-void bu2(bool *bits) {
+void bu2(bool *bits, int n) {
 	//bit dau
 	bits[0] = 1;
-	int flag = 127;
+	int flag = n-1;
 
 	while (bits[flag] == 0) {
 		//cout << "\t" << flag << endl;
@@ -38,14 +38,6 @@ void bu2(bool *bits) {
 //s='1'->1
 int charToInt(char c) {
 	return c - 48;
-}
-
-string removeHeadZero(string &s) {
-
-	while (s[0] == '0') {
-		s = s.substr(1);
-	}
-	return s;
 }
 
 
@@ -75,7 +67,7 @@ string half(string s, bool &bit) {
 }
 
 //day bits 
-void intStringToBits(string s, bool *bits) {
+void intStringToBits(string s, bool *bits, int n) {
 
 	bool sign = 0;
 
@@ -93,7 +85,7 @@ void intStringToBits(string s, bool *bits) {
 
 	temp = s;
 	//int i = 127;
-	int i = 127;
+	int i = n-1;
 
 
 	while (temp.size()) {
@@ -101,7 +93,7 @@ void intStringToBits(string s, bool *bits) {
 		//cout << temp << endl;
 		bits[i--] = bit;
 		if (i < 0) {
-			cout << "\nVuot qua QInt!\n";
+			//cout << "\nVuot qua QInt!\n";
 			return;
 		}
 	}
@@ -119,7 +111,7 @@ bool getLastBit(int n)
 
 
 
-int convertBinArrayToDex(bool *bits, int n = 32) {
+int convertBinArrayToDex(bool *bits, int n) {
 	int decimal = 0;
 	for (int i = 0; i < n; i++)
 		decimal = decimal * 2 + bits[i];
@@ -233,7 +225,7 @@ string AddTwoIntString(string num1, string num2)
 }
 
 
-string bitsToDex(bool* bits) {
+string bitsToDex(bool* bits, int n) {
 	bool sign = 0;
 	if (bits[0] == 1) {
 		//cout << "phat hien so am\n";
@@ -242,10 +234,10 @@ string bitsToDex(bool* bits) {
 	}
 
 	string res = "0";
-	for (int i = 127; i >= 1; i--) {
+	for (int i = n-1; i >= 1; i--) {
 		if (bits[i]) {
 			//cout <<"i= " <<i << endl;
-			res = AddTwoIntString(res, twoPowNum(127 - i));
+			res = AddTwoIntString(res, twoPowNum(n-1 - i));
 		}
 
 	}
@@ -271,9 +263,9 @@ void bitsintStringToBitsArray(string s, bool* bits) {
 	}
 }
 
-string bitsArrayToBitsString(bool* bits) {
+string bitsArrayToBitsString(bool* bits, int n) {
 	string s = "";
-	for (int i = 0; i < 128; i++) {
+	for (int i = 0; i < n; i++) {
 		if (bits[i])
 			s += '1';
 		else
@@ -283,9 +275,52 @@ string bitsArrayToBitsString(bool* bits) {
 }
 
 
-string dexToBin(int num) {
+string dexToBin(int num, int n) {
 	string snum = std::to_string(num);
 	bool bits[128] = { 0 };
-	intStringToBits(snum, bits);
-	return bitsArrayToBitsString(bits);
+	intStringToBits(snum, bits,n);
+	return bitsArrayToBitsString(bits,n);
+}
+
+
+string removeHeadZero(string &s) {
+
+	while (s[0] == '0') {
+		s = s.substr(1);
+	}
+	return s;
+}
+
+
+// "12345" * '6'
+string multifyIntStringWithChar(string s, char c) {
+	int slength = s.size();
+	string res = "";
+	int reminder = 0;
+	int i = slength - 1;
+
+	int top = 0, down=c-'0';
+	int temp = 0;
+	char r; //
+	while (i>=0) {
+		top = s[i] - '0';
+		temp = top * down+reminder;
+		reminder = temp / 10;
+		r = temp % 10 + '0';
+		//cout << "temp: " << temp << "remider: " << reminder << endl;
+		res = r+ res;
+		i--;
+	}
+	if (reminder > 0) {
+		r = reminder + '0';
+		res = r + res;
+	}
+	return res;
+}
+
+bool isStringValid(string s) {
+	if (s.length > 40)
+		return 0;
+
+	return 1;
 }
