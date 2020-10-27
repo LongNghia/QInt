@@ -3,25 +3,23 @@
 #include "utils.h"
 #define K 16383
 
-Qfloat::Qfloat(){}
+Qfloat::Qfloat() {}
 
 Qfloat::Qfloat(string s) {
 	Qfloat q;
 	q.ScanQfloat(s);
 }
 
+Qfloat::Qfloat(char* q) {
+	for (int i = 0; i < 16; i++) {
+		num[i] = q[i];
+	}
+}
+
+
 //Hàm Nhập Qfloat
 void Qfloat::ScanQfloat(string s) {
-	//1.Lấy phần nguyên a, phần thực b
-	//2.Đưa a,b về nhị phân
-	//3.chuẩn hoá về dạng 1.f*e^e
-		//	tính e+k=15bits+ lưu sign = 1bits => 2bytes
-		//	
-		//	lưu phần signification+"0000"=112bits => 14bytes
-//isStringValid();
-
 	bool sign = 0;
-
 	if (s[0] == '-') {
 		sign = 1;
 		s = s.substr(1);
@@ -35,67 +33,71 @@ void Qfloat::ScanQfloat(string s) {
 
 
 	string num1 = "", num2 = "";
+	string res = "";
 
-	num1 = a.shortBin();
-	num2 = b.shortBin();
+	cout << "num1=0: " << num1 << endl;
+	//num1=0
+	if (a.isZero()) {
 
+		num2 = doubleflt(b.toString(), K + 112);
 
-	cout << num1 << endl << num2 << endl;
+		int i = 0;
+		int p = 0;
+		while (num2[i] == '0') {
+			i++;
+		}
+
+		i = i + 1;
+
+		//khong chuan hoa duoc
+		if (i >= K) {
+			p = -K;
+			cout << "khog chuan hoa!" << endl;
+		}
+		else {
+			int p = -i;
+
+		}
+		cout << "i=: " << i << endl;
+		num2 = doubleflt(b.toString(), 112 - p);
+		string significant = num2.substr(i);
+		int exp = p + K;
+		cout << "exp= " << exp << endl;
+		string exponent = dexToBin(exp, 15);
+		char dau = sign + '0';
+		res = dau + exponent + significant;
+		cout << res;
+	}
+
+	//num1!=0
+	else {
+		num1 = a.shortBin(); //"0"
+
+		int p = 0;
+		int num1_length = num1.size();
+		p = num1_length - 1; //0
+		num2 = doubleflt(b.toString(), 112 - p);
+
+		//cout << "num2\n" << num2 << endl;
+		string significant = num1.substr(1) + num2;
+
+		int exp = p + K;
+		cout << "exp= " << exp << endl;
+		string exponent = dexToBin(exp, 15);
+		char dau = sign + '0';
+		res = dau + exponent + significant;
+		cout << res;
+	}
 
 	bool bits[128] = { 0 };
+	bitsintStringToBitsArray(res, bits);
 
-
-	int exp = 0;
-	int num1_length = num1.size();
-
-	//cout << "num1 length: " << num1_length << endl;
-	if (sign) {
-		exp = K + num1_length - 1;
-	}
-	else {
-		exp = K - (num1_length - 1);
-	}
-
-	QInt Qexp(to_string(exp));
-	//bool binexp;
-
-	string expbin = Qexp.shortBin(15);
-	//cout << expbin;
-
-
-
-
-	bits[0] = sign;
-	for (int i = 0; i < 16; i++) {
-		if (expbin[i]) {
-			bits[i + 1] = expbin[i] - '0';
-		}
-	}
-
-	//significant
-	string sigbin = num1.substr(1) + b.shortBin();
-
-	while (sigbin.size() < 112) {
-		sigbin = '0' + sigbin;
-	}
-	//cout << "signbin:" << sigbin << endl;;
-
-	for (int i = 16; i < 128; i++) {
-		bits[i] = sigbin[i - 16] - '0';
-	}
-
-	//for (int i = 0; i < 128; i++) {
-	//	cout << bits[i];
-	//}
-	//cout << endl;
 	bool temp[8] = { 0 };
-	//cout << endl;
 	for (int i = 0; i < 16; i++) {
 		for (int j = 0; j < 8; j++) {
 			temp[j] = (bits[j + 8 * i]);
 		}
 		num[i] = convertBinArrayToDex(temp, 8);
-		//cout << num[i] << endl;
 	}
 
 
@@ -133,17 +135,31 @@ void Qfloat::PrintQfloat() {
 	int exp = abs(stoi(expNum) - K);
 	cout << "exp=\n" << exp << endl;;
 
-	string le = "";
 
-	cout << "\nday bit nguyen :" << endl;
+	//tìm phần nguyên
+	string interger = "1";
 
-	bool binle[112] = { 0 };
-	for (int i = 16; i < 128; i++) {
-		binle[i-16] = bits[i];
+	for (int i = 16; i < 16 + exp; i++) {
+		interger += bits[i] + '0';
 	}
-	
-	le = bitsToDex(binle, 112);
-	cout << "\phan le" << le << endl;
+	cout << endl;
+	cout << interger;
+
+
+
+
+
+	//string le = "";
+
+	//cout << "\nday bit nguyen :" << endl;
+
+	//bool binle[112] = { 0 };
+	//for (int i = 16; i < 128; i++) {
+	//	binle[i-16] = bits[i];
+	//}
+	//
+	//le = bitsToDex(binle, 112);
+	//cout << "\phan le" << le << endl;
 
 	//cout <<" nguyeen: \n:" <<nguyen;
 
@@ -186,7 +202,6 @@ Qfloat Qfloat::BinToDec(bool *bits) {
 			temp[j] = (bits[j + 8 * i]);
 		}
 		q.num[i] = convertBinArrayToDex(temp, 8);
-		//cout << num[i] << endl;
 	}
 	return q;
 }

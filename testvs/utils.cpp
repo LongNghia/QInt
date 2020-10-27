@@ -20,7 +20,7 @@ int stringToInt(string s) {
 // dua mang bits ve dang bu 2
 void bu2(bool *bits, int n) {
 	//bit dau
-	bits[0] = 1;
+	bits[0] = !bits[0];
 	int flag = n-1;
 
 	while (bits[flag] == 0) {
@@ -318,9 +318,35 @@ string multifyIntStringWithChar(string s, char c) {
 	return res;
 }
 
-bool isStringValid(string s) {
-	if (s.length > 40)
-		return 0;
 
+string doubleflt(string s, int n) {
+
+	string res = "";
+	string temp = s;
+	for (int i = 0; i < n; i++) {
+		temp = multifyIntStringWithChar(temp, '2');
+		if (temp[0] == '1') {
+			res += '1';
+			temp = temp.substr(1);
+		}
+		else {
+			res += '0';
+		}
+	}
+	return res;
+
+}
+
+
+bool isStringZero(string s) {
+	int length = s.size();
+	int i = 0;
+	while (i<length)
+	{
+		if (s[i++] == '1')
+			return 0;
+	}
 	return 1;
 }
+
+

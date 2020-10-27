@@ -52,11 +52,14 @@ public:
 	QInt operator + (QInt b);
 	QInt operator - (QInt b);
 	QInt operator * (QInt b);
+	QInt operator / (QInt b);
+	//----OPERATOR SO SÁNH
+	bool operator < (QInt b);
 
 
-
-	//----OPERATOR =
+	//OPERATOR GÁN
 	QInt& operator=(const QInt& other);
+
 
 	// ------TEST
 public:
@@ -66,16 +69,19 @@ public:
 		for (int i = 0; i < 128; i++) {
 			cout << b[i] << "";
 		}
+		cout << endl;
+
 		delete[]b;
 	}
 
-	string toString();
-	bool isNegative();
+
 
 	//------FUNCTIONAL
 public:
+	string toString();
 	string shortBin(int nbis = 0);
-
+	bool isNegative();
+	bool isZero();
 };
 
 

@@ -41,7 +41,9 @@ string removeHeadZero(string &s);
 
 string multifyIntStringWithChar(string s, char c);
 
-bool isStringValid(string s);
+string doubleflt(string, int );
+
+bool isStringZero(string);
 
 
 #endif

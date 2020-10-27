@@ -6,12 +6,13 @@ using namespace std;
 
 class Qfloat {
 private:
-	int num[16];
+	char num[16];
 public:
 	Qfloat();
 	Qfloat(string);
+	Qfloat(char* );
 public:
-
+	
 
 	//Hàm Nhập
 	void ScanQfloat(string s);

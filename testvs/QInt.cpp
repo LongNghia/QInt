@@ -1,7 +1,9 @@
 ﻿#include "QInt.h"
 #include "utils.h"
-
-//hàm nhập
+#include <exception>
+#include <stdexcept>
+#include <sstream>
+//Hàm nhập
 void QInt::ScanQInt(string s)
 {
 	bool bits[128] = { 0 };
@@ -22,20 +24,6 @@ void QInt::ScanQInt(string s)
 //Hàm xuất
 void QInt::PrintQInt()
 {
-	//string sbits = "";
-	//string res = "";
-	//string temp = "";
-	//bool bits[128] = { 0 };
-
-	////cout << endl;
-	//for (int i = 0; i < 4; i++) {
-	//	temp = dexToBin(num[i]);
-	//	sbits += temp.substr(96);
-	//}
-	////cout << sbits << endl;
-	//bitsintStringToBitsArray(sbits, bits);
-	//cout << bitsToDex(bits) << endl;
-
 	cout << this->toString() << endl;
 }
 
@@ -66,13 +54,6 @@ QInt QInt::operator + (QInt b) {
 		}
 		c[i] = s;
 	}
-	//xuat
-	//cout << endl;
-
-	//for (int i = 0; i < 128; i++) {
-	//	cout << c[i] << "";
-	//}
-	//cout << endl;
 
 	sum = BinToDec(c);
 	delete[]b1;
@@ -80,17 +61,18 @@ QInt QInt::operator + (QInt b) {
 }
 
 //TOÁN TỬ TRỪ
-QInt QInt::operator- (QInt b)
+QInt QInt::operator- (QInt other)
 {
-	//if (b < *this) {
 
-	//}
+
+	QInt b = other;
+
 	bool *bits = DecToBin(b);
 	bu2(bits);
-	b.PrintQInt();
 	QInt temp;
 	temp = BinToDec(bits);
-	temp.PrintQInt();
+	//cout << "bu 2!" << temp.toString()<<endl;
+	
 	delete[]bits;
 
 	return *this + temp;
@@ -118,7 +100,7 @@ QInt QInt::operator * (QInt b) {
 	string resMulEach = "";
 	string res = "";
 	string pairSum = "";
-	
+
 	int i = blength - 1;
 	while (i >= 0) {
 		resMulEach = multifyIntStringWithChar(num1, num2[i]);
@@ -138,7 +120,41 @@ QInt QInt::operator * (QInt b) {
 	return num3;
 }
 
+//TOÁN TỬ CHIA
+QInt QInt::operator / (QInt other) {
 
+	QInt a = *this;
+	QInt b = other;
+
+	bool sign = (this->isNegative() ^ b.isNegative()) ? 1 : 0;
+	QInt zero("0");
+	QInt one("1");
+
+	if (this->isNegative()) {
+		a = zero - a;
+	}
+
+	if (b.isNegative()) {
+		b = zero - b;
+	}
+
+
+	if (b.isZero()) {
+		string str = "Can not devide by zero!!!";
+		throw runtime_error("Math error: Attempted to divide by Zero\n");
+	}
+
+	QInt quotient("0");
+	while (b < a) {
+		a = a - b;
+		quotient = quotient + one;
+	}
+
+	return sign ? zero - quotient: quotient;
+
+}
+
+//TOÁN TỬ GÁN
 QInt& QInt::operator=(const QInt& other) {
 	for (int i = 0; i < 4; i++) {
 		this->num[i] = other.num[i];
@@ -146,6 +162,37 @@ QInt& QInt::operator=(const QInt& other) {
 	return *this;
 }
 
+//TOÁN TỬ <
+bool QInt::operator<(QInt other) {
+
+	int count = 0;
+	bool* bits1 = DecToBin(*this);
+	bool* bits2 = DecToBin(other);
+
+	//bits[0]
+	if (bits1[0] < bits2[0]) {
+		return false;
+	}
+	else if (bits1[0] > bits2[0])
+		return true;
+
+	else {
+		for (int i = 1; i < 128; i++) {
+			if (bits2[i] > bits1[i]) {
+				return true;
+			}
+			else if (bits1[i] > bits2[i]) {
+				return false;
+			}
+			else
+				count++;
+		}
+		if (count == 127) {
+			return false;
+		}
+	}
+	return true;
+}
 
 //CONVERT FUNCTIONS
 
@@ -274,9 +321,16 @@ string QInt::toString() {
 	return bitsToDex(bits);
 }
 
-
 //Kiểm tra một chuỗi ký tự số có âm không
 //VD "-123456"
 bool QInt::isNegative() {
-	return this->num[0]<0;
+	return this->num[0] < 0;
+}
+
+bool QInt::isZero() {
+	for (int i = 0; i < 4; i++) {
+		if (this->num[i] != 0)
+			return 0;
+	}
+	return 1;
 }
