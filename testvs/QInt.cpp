@@ -8,11 +8,11 @@ void QInt::ScanQInt(string s)
 {
 	bool bits[128] = { 0 };
 
-	//isStringValid(s);
-	//s = validize(s);
+	s = standardizeString(s);
 	intStringToBits(s, bits);
 
 	bool temp[32] = { 0 };
+
 	for (int j = 0; j < 4; j++) {
 		for (int i = 0; i < 32; i++) {
 			temp[i] = bits[i + 32 * j];
@@ -72,7 +72,7 @@ QInt QInt::operator- (QInt other)
 	QInt temp;
 	temp = BinToDec(bits);
 	//cout << "bu 2!" << temp.toString()<<endl;
-	
+
 	delete[]bits;
 
 	return *this + temp;
@@ -80,9 +80,6 @@ QInt QInt::operator- (QInt other)
 
 //TOÁN TỬ NHÂN
 QInt QInt::operator * (QInt b) {
-	//!!kiểm tra dấu
-
-
 
 	bool sign = this->isNegative() ^ b.isNegative();
 
@@ -90,8 +87,9 @@ QInt QInt::operator * (QInt b) {
 	string num1 = this->toString();
 	string num2 = b.toString();
 
+
 	num1 = this->isNegative() ? num1.substr(1) : num1;
-	num2 = b.isNegative() ? num1.substr(1) : num2;
+	num2 = b.isNegative() ? num2.substr(1) : num2;
 
 
 	int blength = num2.size();
@@ -145,12 +143,12 @@ QInt QInt::operator / (QInt other) {
 	}
 
 	QInt quotient("0");
-	while (b < a) {
+	while (b <= a) {
 		a = a - b;
 		quotient = quotient + one;
 	}
 
-	return sign ? zero - quotient: quotient;
+	return sign ? zero - quotient : quotient;
 
 }
 
@@ -160,6 +158,15 @@ QInt& QInt::operator=(const QInt& other) {
 		this->num[i] = other.num[i];
 	}
 	return *this;
+}
+
+//TOÁN TỬ ==
+bool QInt::operator==(QInt other) {
+	for (int i = 0; i < 4; i++) {
+		if (this->num[i] != other.num[i])
+			return false;
+	}
+	return true;
 }
 
 //TOÁN TỬ <
@@ -194,8 +201,121 @@ bool QInt::operator<(QInt other) {
 	return true;
 }
 
-//CONVERT FUNCTIONS
+//TOÁN TỬ <=
+bool QInt::operator<=(QInt other) {
+	if (*this < other || *this == other)
+		return true;
+	return false;
+}
 
+//TOÁN TỬ >
+bool QInt::operator>(QInt other) {
+	return other < *this;
+}
+
+//TOÁN TỬ >=
+bool QInt::operator>=(QInt other) {
+	return other <= *this;
+}
+
+//TOÁN TỬ &
+QInt QInt::operator&(QInt other) {
+	bool* b1 = DecToBin(*this);
+	bool* b2 = DecToBin(other);
+	bool b[128];
+	for (int i = 0; i < 128; i++)
+		b[i] = b1[i] & b2[i];
+	return BinToDec(b);
+}
+
+//TOÁN TỬ |
+QInt QInt::operator|(QInt other) {
+	bool* b1 = DecToBin(*this);
+	bool* b2 = DecToBin(other);
+	bool b[128];
+	for (int i = 0; i < 128; i++)
+		b[i] = b1[i] | b2[i];
+	return BinToDec(b);
+}
+
+//TOÁN TỬ ^
+QInt QInt::operator^(QInt other) {
+	bool* b1 = DecToBin(*this);
+	bool* b2 = DecToBin(other);
+	bool b[128];
+	for (int i = 0; i < 128; i++)
+		b[i] = b1[i] ^ b2[i];
+	return BinToDec(b);
+}
+
+//TOÁN TỬ ~
+QInt QInt::operator~() {
+	bool* b = DecToBin(*this);
+	bool res[128];
+	for (int i = 0; i < 128; i++)
+		res[i] = !b[i];
+	return BinToDec(res);
+}
+
+//TOÁN TỬ <<
+QInt QInt::operator<<(int n) {
+	bool* b = DecToBin(*this);
+	bool bits[128] = {0};
+
+	for (int i = n; i < 128; i++)
+		bits[i-n] = b[i];
+	return BinToDec(bits);
+}
+
+//TOÁN TỬ >>
+QInt QInt::operator>>(int n) {
+	bool* b = DecToBin(*this);
+	bool bits[128] = { 0 };
+	for (int i = 0; i < 128-n; i++)
+		bits[i+n] = b[i];
+	return BinToDec(bits);
+}
+
+//HÀM ROL
+QInt QInt::rol(int n) {
+
+	bool* b = DecToBin(*this);
+	cout << bitsArrayToBitsString(b) << endl;;
+
+	bool bits[128] = {0};
+
+	for (int i = n; i < 128; i++) {
+		bits[i - n] = b[i];
+	}
+
+	for (int i = 0; i < n; i++) {
+		bits[128 -n + i] = b[i];
+	}
+	cout << bitsArrayToBitsString(bits) << endl;;
+
+	return BinToDec(bits);
+}
+
+//HÀM ROR
+QInt QInt::ror(int n) {
+
+	bool* b = DecToBin(*this);
+
+	bool bits[128] = { 0 };
+
+	for (int i = 128-n; i < 128; i++) {
+		bits[i- 128 + n] = b[i];
+	}
+
+	for (int i = 0; i < 128 - n; i++) {
+		bits[ n + i] = b[i];
+	}
+
+
+	return BinToDec(bits);
+}
+
+//CONVERT FUNCTIONS
 //Chuyển đổi từ hệ 10 -> 2
 bool* QInt::DecToBin(QInt q) {
 	bool* b = new bool[128];
@@ -321,11 +441,13 @@ string QInt::toString() {
 	return bitsToDex(bits);
 }
 
+
 //Kiểm tra một chuỗi ký tự số có âm không
 //VD "-123456"
 bool QInt::isNegative() {
 	return this->num[0] < 0;
 }
+
 
 bool QInt::isZero() {
 	for (int i = 0; i < 4; i++) {

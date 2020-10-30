@@ -23,11 +23,11 @@ bool getLastBit(int n);
 int convertBinArrayToDex(bool *, int n=32);
 
 //"123"*3 ="369"
-string multifyStringWithNum(std::string num1, int num2);
+string multifyStringWithNum(string , int );
 
 string twoPowNum(int n);
 
-string AddTwoIntString(std::string num1, std::string num2);
+string AddTwoIntString(string , string );
 
 string bitsToDex(bool* bits, int n=128);
 
@@ -43,7 +43,18 @@ string multifyIntStringWithChar(string s, char c);
 
 string doubleflt(string, int );
 
-bool isStringZero(string);
+bool isBinStringZero(string);
 
+// Chuẩn hoá string
+string standardizeString(string);
+
+//kiểm tra 1 kí tự có phải là digit
+bool isDigit(char);
+
+//remove kí tự đặc biệt ex: "12!@3" --> "123"
+string remove_non_digits(const string);
+
+//kiểm tra chuỗi digit là 0
+bool isIntStringZero(string);
 
 #endif

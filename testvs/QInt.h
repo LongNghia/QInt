@@ -55,6 +55,27 @@ public:
 	QInt operator / (QInt b);
 	//----OPERATOR SO SÁNH
 	bool operator < (QInt b);
+	bool operator > (QInt b);
+	bool operator <= (QInt b);
+	bool operator >= (QInt b);
+	bool operator == (QInt b);
+
+
+
+
+
+	//---OPERATOR & | ^ ~
+	QInt operator&(QInt );
+	QInt operator|(QInt );
+	QInt operator^(QInt );
+	QInt operator~();
+	QInt operator<<(int );
+	QInt operator>>(int);
+	QInt rol(int);
+	QInt ror(int);
+
+
+
 
 
 	//OPERATOR GÁN

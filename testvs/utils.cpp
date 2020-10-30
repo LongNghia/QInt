@@ -338,7 +338,9 @@ string doubleflt(string s, int n) {
 }
 
 
-bool isStringZero(string s) {
+bool isBinStringZero(string s) {
+
+
 	int length = s.size();
 	int i = 0;
 	while (i<length)
@@ -349,4 +351,45 @@ bool isStringZero(string s) {
 	return 1;
 }
 
+bool isIntStringZero(string s) {
 
+	if (s[0] == '+' || s[0] == '-')
+		s = s.substr(1);
+
+	int length = s.size();
+	int i = 0;
+	while (i < length)
+	{
+		if (s[i++] != '0')
+			return false;
+	}
+	return true;
+}
+
+
+
+bool isDigit(char ch) {
+	return '0' <= ch && ch <= '9';
+}
+
+
+string remove_non_digits(const string str) {
+	string s = str;
+	string result = "";
+	if (s[0] != '+' && s[0] != '-' && !isDigit(s[0]))
+		s = s.substr(1);
+	else
+		result += s[0];
+	for (int i = 1; i < s.length(); i++) {
+		if (isDigit(s[i]))
+			result += s[i];
+	}
+	return result;
+}
+
+
+string standardizeString(string s) {
+	if (isIntStringZero(s))
+		return "0";
+	return remove_non_digits(s);
+}
