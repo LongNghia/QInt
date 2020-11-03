@@ -123,12 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MainProcess.cpp" />
     <ClCompile Include="Qfloat.cpp" />
     <ClCompile Include="QInt.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MainProcess.h" />
     <ClInclude Include="Qfloat.h" />
     <ClInclude Include="QInt.h" />
     <ClInclude Include="utils.h" />

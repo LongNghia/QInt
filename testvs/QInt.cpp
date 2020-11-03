@@ -3,6 +3,8 @@
 #include <exception>
 #include <stdexcept>
 #include <sstream>
+#include <unordered_map>
+
 //Hàm nhập
 void QInt::ScanQInt(string s)
 {
@@ -17,7 +19,7 @@ void QInt::ScanQInt(string s)
 		for (int i = 0; i < 32; i++) {
 			temp[i] = bits[i + 32 * j];
 		}
-		num[j] = convertBinArrayToDex(temp, 32);
+		num[j] = BinArrayToInt(temp, 32);
 	}
 }
 
@@ -57,21 +59,21 @@ QInt QInt::operator + (QInt b) {
 
 	sum = BinToDec(c);
 	delete[]b1;
+
+
 	return 	sum;
 }
 
 //TOÁN TỬ TRỪ
 QInt QInt::operator- (QInt other)
 {
-
-
 	QInt b = other;
 
 	bool *bits = DecToBin(b);
 	bu2(bits);
+
 	QInt temp;
 	temp = BinToDec(bits);
-	//cout << "bu 2!" << temp.toString()<<endl;
 
 	delete[]bits;
 
@@ -107,9 +109,7 @@ QInt QInt::operator * (QInt b) {
 
 			resMulEach += '0';
 		}
-		//cout << resMulEach << endl;
 		res = AddTwoIntString(res, resMulEach);
-		//cout << "char:\n" << res;
 		i--;
 	}
 
@@ -121,36 +121,99 @@ QInt QInt::operator * (QInt b) {
 //TOÁN TỬ CHIA
 QInt QInt::operator / (QInt other) {
 
-	QInt a = *this;
-	QInt b = other;
+	QInt q = *this;
+	QInt m = other;
 
-	bool sign = (this->isNegative() ^ b.isNegative()) ? 1 : 0;
+	bool sign = (this->isNegative() ^ m.isNegative()) ? 1 : 0;
+
 	QInt zero("0");
-	QInt one("1");
 
 	if (this->isNegative()) {
-		a = zero - a;
+		q = zero - q;
 	}
 
-	if (b.isNegative()) {
-		b = zero - b;
+	if (m.isNegative()) {
+		m = zero - m;
 	}
 
+	string qbin = binArrayToBinString(DecToBin(q));
+	string mbin = binArrayToBinString(DecToBin(m));
+	string abin = binArrayToBinString(DecToBin(QInt("0")));
 
-	if (b.isZero()) {
-		string str = "Can not devide by zero!!!";
-		throw runtime_error("Math error: Attempted to divide by Zero\n");
+
+	string aq = "";
+	QInt mbu2 = zero - m;
+
+	string subResult = "";
+
+	int k = 128;
+
+	for (int i = 0; i < 128; i++) {
+		//cout << "aq= " << aq << endl;
+		//cout << "abin= " << abin << endl;
+		//cout << "qbin= " << qbin << endl;
+
+		aq = abin + qbin;
+		aq = aq + '0';
+		aq = aq.substr(1);
+
+		abin = aq.substr(0, 128);
+		qbin = aq.substr(128, 128);
+
+
+		QInt a2;
+		a2 = BinToDec(binStringToBinArray(abin));
+		subResult = binArrayToBinString(DecToBin(a2 + mbu2));
+
+		//cout << "subtract:\n" << subResult << endl;;
+
+		if (subResult[0] == '0') {
+			abin = subResult;
+			qbin[127] = '1';
+		}
+		else {
+			qbin[127] = '0';
+		}
 	}
-
-	QInt quotient("0");
-	while (b <= a) {
-		a = a - b;
-		quotient = quotient + one;
-	}
-
-	return sign ? zero - quotient : quotient;
-
+	QInt thuong = BinToDec(binStringToBinArray(qbin));
+	return sign ? zero - thuong : thuong;
 }
+//QInt QInt::operator / (QInt other) {
+//
+//	QInt a = *this;
+//	QInt b = other;
+//
+//	bool sign = (this->isNegative() ^ b.isNegative()) ? 1 : 0;
+//	QInt zero("0");
+//	QInt one("1");
+//
+//	if (this->isNegative()) {
+//		a = zero - a;
+//	}
+//
+//	if (b.isNegative()) {
+//		b = zero - b;
+//	}
+//
+//	cout << "so bi chia" << a.toString() << endl;
+//
+//	cout << "so chia" << b.toString() << endl;
+//
+//	if (b.isZero()) {
+//		string str = "Can not devide by zero!!!";
+//		throw runtime_error("Math error: Attempted to divide by Zero\n");
+//	}
+//
+//	QInt quotient("0");
+//	while (b <= a) {
+//		a = a - b;
+//		cout << a.toString() << endl;
+//		quotient = quotient + one;
+//	}
+//
+//	return sign ? zero - quotient : quotient;
+//
+//}
 
 //TOÁN TỬ GÁN
 QInt& QInt::operator=(const QInt& other) {
@@ -260,10 +323,10 @@ QInt QInt::operator~() {
 //TOÁN TỬ <<
 QInt QInt::operator<<(int n) {
 	bool* b = DecToBin(*this);
-	bool bits[128] = {0};
+	bool bits[128] = { 0 };
 
 	for (int i = n; i < 128; i++)
-		bits[i-n] = b[i];
+		bits[i - n] = b[i];
 	return BinToDec(bits);
 }
 
@@ -271,8 +334,8 @@ QInt QInt::operator<<(int n) {
 QInt QInt::operator>>(int n) {
 	bool* b = DecToBin(*this);
 	bool bits[128] = { 0 };
-	for (int i = 0; i < 128-n; i++)
-		bits[i+n] = b[i];
+	for (int i = 0; i < 128 - n; i++)
+		bits[i + n] = b[i];
 	return BinToDec(bits);
 }
 
@@ -280,18 +343,16 @@ QInt QInt::operator>>(int n) {
 QInt QInt::rol(int n) {
 
 	bool* b = DecToBin(*this);
-	cout << bitsArrayToBitsString(b) << endl;;
 
-	bool bits[128] = {0};
+	bool bits[128] = { 0 };
 
 	for (int i = n; i < 128; i++) {
 		bits[i - n] = b[i];
 	}
 
 	for (int i = 0; i < n; i++) {
-		bits[128 -n + i] = b[i];
+		bits[128 - n + i] = b[i];
 	}
-	cout << bitsArrayToBitsString(bits) << endl;;
 
 	return BinToDec(bits);
 }
@@ -303,12 +364,12 @@ QInt QInt::ror(int n) {
 
 	bool bits[128] = { 0 };
 
-	for (int i = 128-n; i < 128; i++) {
-		bits[i- 128 + n] = b[i];
+	for (int i = 128 - n; i < 128; i++) {
+		bits[i - 128 + n] = b[i];
 	}
 
 	for (int i = 0; i < 128 - n; i++) {
-		bits[ n + i] = b[i];
+		bits[n + i] = b[i];
 	}
 
 
@@ -338,74 +399,127 @@ QInt QInt::BinToDec(bool* bit) {
 }
 
 //Chuyển đổi từ 2 -> 16
-char* QInt::BinToHex(bool* bit) {
-	char* s = new char[32]; int n[32];
-	for (int i = 0; i < 32; i++)
-		n[i] = 0;
-	for (int i = 0; i < 32; i++)
-		for (int j = 0; j < 4; j++)
-			if (bit[j + i * 4] == 1)
-				n[i] = n[i] + int(pow(2, j));
-	for (int i = 0; i < 32; i++)
-		switch (n[i]) {
-		case 0:
-			s[i] = '0';
-			break;
-		case 1:
-			s[i] = '1';
-			break;
-		case 2:
-			s[i] = '2';
-			break;
-		case 3:
-			s[i] = '3';
-			break;
-		case 4:
-			s[i] = '4';
-			break;
-		case 5:
-			s[i] = '5';
-			break;
-		case 6:
-			s[i] = '6';
-			break;
-		case 7:
-			s[i] = '7';
-			break;
-		case 8:
-			s[i] = '8';
-			break;
-		case 9:
-			s[i] = '9';
-			break;
-		case 10:
-			s[i] = 'A';
-			break;
-		case 11:
-			s[i] = 'B';
-			break;
-		case 12:
-			s[i] = 'C';
-			break;
-		case 13:
-			s[i] = 'D';
-			break;
-		case 14:
-			s[i] = 'E';
-			break;
-		case 15:
-			s[i] = 'F';
-			break;
-		}
-	return s;
+string QInt::BinToHex(bool* bit) {
+
+	unordered_map<string, char> um;
+	string sbin = binArrayToBinString(bit);
+	um["0000"] = '0';
+	um["0001"] = '1';
+	um["0010"] = '2';
+	um["0011"] = '3';
+	um["0100"] = '4';
+	um["0101"] = '5';
+	um["0110"] = '6';
+	um["0111"] = '7';
+	um["1000"] = '8';
+	um["1001"] = '9';
+	um["1010"] = 'A';
+	um["1011"] = 'B';
+	um["1100"] = 'C';
+	um["1101"] = 'D';
+	um["1110"] = 'E';
+	um["1111"] = 'F';
+
+	string fourbit = "";
+	string res;
+	while (sbin.length()) {
+		fourbit = sbin.substr(0, 4);
+		res += um[fourbit];
+		sbin = sbin.substr(4);
+	}
+	return res;
+
 }
 
 //Chuyển đổi từ 10 -> 16
-char* QInt::DecToHex(QInt x) {
+string QInt::DecToHex(QInt x) {
 	bool* b = DecToBin(x);
-	char* s = BinToHex(b);
+	string s = BinToHex(b);
 	return s;
 }
+
+//Chuyển đổi từ 16 -> 10
+QInt QInt::HexToDec(string s) {
+	bool* bin = HexToBin(s);
+	QInt q = BinToDec(bin);
+	delete[]bin;
+	return q;
+}
+
+//Chuyển đổi từ 16 -> 2
+bool* QInt::HexToBin(string hexdec) {
+	long int i = 0;
+	string res = "";
+	while (hexdec[i]) {
+
+		switch (hexdec[i]) {
+		case '0':
+			res += "0000";
+			break;
+		case '1':
+			res += "0001";
+			break;
+		case '2':
+			res += "0010";
+			break;
+		case '3':
+			res += "0011";
+			break;
+		case '4':
+			res += "0100";
+			break;
+		case '5':
+			res += "0101";
+			break;
+		case '6':
+			res += "0110";
+			break;
+		case '7':
+			res += "0111";
+			break;
+		case '8':
+			res += "1000";
+			break;
+		case '9':
+			res += "1001";
+			break;
+		case 'A':
+		case 'a':
+			res += "1010";
+			break;
+		case 'B':
+		case 'b':
+			res += "1011";
+			break;
+		case 'C':
+		case 'c':
+			res += "1100";
+			break;
+		case 'D':
+		case 'd':
+			res += "1101";
+			break;
+		case 'E':
+		case 'e':
+			res += "1110";
+			break;
+		case 'F':
+		case 'f':
+			res += "1111";
+			break;
+		default:
+			cout << "\nInvalid hexadecimal digit "
+				<< hexdec[i];
+		}
+		i++;
+	}
+
+	bool *b = binStringToBinArray(res);
+	return b;
+}
+
+
+
 
 // 123 --> "1111011"
 string QInt::shortBin(int nbit) {
@@ -413,7 +527,7 @@ string QInt::shortBin(int nbit) {
 
 	bool *bits;
 	bits = DecToBin(*this);
-	res = bitsArrayToBitsString(bits);
+	res = binArrayToBinString(bits);
 	res = removeHeadZero(res);
 	while (res.size() < nbit) {
 		res = '0' + res;
@@ -427,25 +541,26 @@ string QInt::shortBin(int nbit) {
 
 string QInt::toString() {
 	string sbits = "";
-	string res = "";
 	string temp = "";
-	bool bits[128] = { 0 };
-
-	//cout << endl;
-	for (int i = 0; i < 4; i++) {
-		temp = dexToBin(num[i]);
-		sbits += temp.substr(96);
+	bool sign = 0;
+	bool *bits;
+	bits = DecToBin(*this);
+	if (this->isNegative()) {
+		bu2(bits);
+		sign = 1;
 	}
-	//cout << sbits << endl;
-	bitsintStringToBitsArray(sbits, bits);
-	return bitsToDex(bits);
+
+	string res = binToQInt(bits);
+	delete[]bits;
+	return  sign ? '-' + res : res;
 }
 
 
 //Kiểm tra một chuỗi ký tự số có âm không
 //VD "-123456"
 bool QInt::isNegative() {
-	return this->num[0] < 0;
+	
+	return ((this->num[0] >> 31) &1);
 }
 
 

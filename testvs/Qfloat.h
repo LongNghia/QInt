@@ -20,7 +20,12 @@ public:
 	void PrintQfloat();
 
 	// Hàm chuyển đổi số Qfloat nhị phân sang thập phân
-	Qfloat BinToDec(bool *bit);
+	static Qfloat BinToDec(bool *bit);
+
 	//Hàm chuyển đổi số Qfloat thập phân sang nhị phân
-	bool *DecToBin(Qfloat x);
+	static bool *DecToBin(Qfloat x);
+
+
+public:
+	string toString();
 };

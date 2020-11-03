@@ -10,29 +10,21 @@ class QInt
 {
 private:
 	int num[4];
-
 	//--CONSTRUCTOR-DESTRUCTOR
 public:
 	QInt() {
 
 	}
-	QInt(string s) {
-		this->ScanQInt(s);
+	QInt(string num) {
+		this->ScanQInt(num);
 	}
 	QInt(int* numArray) {
 		for (int i = 0; i <= 4; i++) {
 			num[i] = numArray[i];
 		}
 	}
-	//--GETTER
+
 public:
-	int* getNum() {
-		int* num = new int[4];
-		for (int i = 0; i < 4; i++) {
-			num[i] = this->num[i];
-		}
-		return num;
-	}
 
 	//--NHẬP-XUẤT
 public:
@@ -41,11 +33,14 @@ public:
 
 	//CONVERT
 public:
-	
-	 static bool* DecToBin(QInt x);
-	 static QInt BinToDec(bool* bit);
-	 static char* BinToHex(bool* bit);
-	 static char* DecToHex(QInt x);
+
+	static bool* DecToBin(QInt x);
+	static QInt BinToDec(bool* bit);
+	static string BinToHex(bool* bit);
+	static string DecToHex(QInt x);
+	static QInt HexToDec(string hex);
+	static bool* HexToBin(string hex);
+
 
 	//OPERATOR + - * /
 public:
@@ -53,6 +48,8 @@ public:
 	QInt operator - (QInt b);
 	QInt operator * (QInt b);
 	QInt operator / (QInt b);
+
+
 	//----OPERATOR SO SÁNH
 	bool operator < (QInt b);
 	bool operator > (QInt b);
@@ -61,55 +58,30 @@ public:
 	bool operator == (QInt b);
 
 
-
-
-
 	//---OPERATOR & | ^ ~
-	QInt operator&(QInt );
-	QInt operator|(QInt );
-	QInt operator^(QInt );
+	QInt operator&(QInt);
+	QInt operator|(QInt);
+	QInt operator^(QInt);
 	QInt operator~();
-	QInt operator<<(int );
+	QInt operator<<(int);
 	QInt operator>>(int);
 	QInt rol(int);
 	QInt ror(int);
 
-
-
-
-
 	//OPERATOR GÁN
 	QInt& operator=(const QInt& other);
 
-
-	// ------TEST
-public:
-	void tobin() {
-		bool *b = DecToBin(*this);
-
-		for (int i = 0; i < 128; i++) {
-			cout << b[i] << "";
-		}
-		cout << endl;
-
-		delete[]b;
-	}
-
-
-
 	//------FUNCTIONAL
 public:
+	//QInt --> "12345"
 	string toString();
+	//QInt --> "11010101"
 	string shortBin(int nbis = 0);
+	//true if Qint is negative
 	bool isNegative();
+	//true if Qint is equal to 0
 	bool isZero();
 };
-
-
-
-
-
-
 
 
 #endif
