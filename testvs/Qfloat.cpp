@@ -96,9 +96,9 @@ void Qfloat::ScanQfloat(string s) {
 					}
 				}
 				else {
-					//chuẩn hoá được
-					int p = -i;
+					//chuẩn hoá được 0.1
 
+					int p = -i;
 					num2 = decimalPartToBin(b, 112 - p);
 					string significant = num2.substr(i);
 					int exp = p + K;
@@ -163,13 +163,14 @@ bool *Qfloat::DecToBin(Qfloat x) {
 Qfloat Qfloat::BinToDec(bool *bits) {
 	Qfloat q;
 	bool temp[8] = { 0 };
-
 	for (int i = 0; i < 16; i++) {
 		for (int j = 0; j < 8; j++) {
 			temp[j] = (bits[j + 8 * i]);
 		}
-		q.num[i] = (char) BinArrayToInt(temp, 8);
+		q.num[i] = BinArrayToInt(temp, 8);
+
 	}
+
 	return q;
 }
 
@@ -189,7 +190,6 @@ string Qfloat::toString() {
 	bool* bits = this->DecToBin(*this);
 
 	string nu = binArrayToBinString(bits);
-
 	if (bits[0] == 1)
 		res = "-";
 
@@ -236,15 +236,15 @@ string Qfloat::toString() {
 		{
 			//inbit = inbit + nu.substr(16, 112 - p);
 			inbit = inbit + nu.substr(16, p);
-
 			flbit = nu.substr(16 + p);
 			bool* in = binStringToBinArray(inbit);
-
 			string n = QInt::BinToDec(in).toString();
 
 			for (int i = 0; i < flbit.length(); i++)
 				if (flbit[i] == '1')
+				{
 					l = add_two_flt_string(l, half_pow_num(i + 1));
+				}
 
 			res = res + n + "." + l;
 			delete[]in;
@@ -252,7 +252,7 @@ string Qfloat::toString() {
 		else
 		{
 			//tính toán quá lâu!!!
-			return "Denomalized!";
+			return "It takes long time to save!";
 			string temp = "";
 			int e = -p;
 			for (int i = 0; i < e - 1; i++)

@@ -6,7 +6,7 @@ using namespace std;
 
 class Qfloat {
 private:
-	char num[16];
+	unsigned char num[16];
 public:
 	Qfloat();
 	Qfloat(string);

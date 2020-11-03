@@ -72,7 +72,6 @@ void intStringToBits(string s, bool *bits, int n) {
 	temp = s;
 	int i = n - 1;
 
-
 	while (temp.length()) {
 		temp = half(temp, bit);
 		bits[i--] = bit;
@@ -84,6 +83,7 @@ void intStringToBits(string s, bool *bits, int n) {
 	if (sign) {
 		bu2(bits);
 	}
+
 }
 
 
@@ -249,6 +249,12 @@ bool* binStringToBinArray(string s) {
 	bool* bits = new bool[128];
 
 	int slength = s.size();
+	if (slength < 128) {
+		for (int i = 0; i < 128 - slength; i++) {
+			s = '0' + s;
+		}
+	}
+
 
 	for (int i = 0; i < 128; i++) {
 		bits[i] = 0;
@@ -257,13 +263,14 @@ bool* binStringToBinArray(string s) {
 	int i = 0;
 	while (s[i]) {
 		if (s[i] == '1')
-			bits[127 - slength + 1 + i] = 1;
+			bits[i] = 1;
 		else
 		{
 			bits[i] = 0;
 		}
 		i++;
 	}
+
 	return bits;
 }
 
@@ -294,7 +301,7 @@ string removeHeadZero(string &s) {
 	}
 	if (s.length())
 		return s;
-	else 
+	else
 		return "0";
 }
 
@@ -421,11 +428,23 @@ string half_pow_num(int n) {
 
 
 string add_two_flt_string(string s1, string s2) {
-	int dif; string temp = ""; string s3 = "", res = "";
+
+	int dif; 
+	string temp = ""; 
+	string s3 = "", res = "";
+
 	if (s1.length() >= s2.length())
 		dif = s1.length() - s2.length();
 	else
 		dif = s2.length() - s1.length();
+
+	if (dif == 0) {
+		res = AddTwoIntString(s1, s2);
+		if (res.length() > s2.length())
+			res = res.substr(1);
+		return res;
+	}
+
 	for (int i = 0; i < dif; i++)
 	{
 		temp = temp + '0';
@@ -438,7 +457,41 @@ string add_two_flt_string(string s1, string s2) {
 			res = AddTwoIntString(s3, s2);
 		}
 	}
+
 	if (res.length() > s3.length())
 		res = res.substr(1);
+	return res;
+}
+
+
+string shiftLeft(string s, int n) {
+	string res = s.substr(n);
+	for (int i = 0; i < n; i++) {
+		res += '0';
+	}
+	return res;
+}
+
+
+string shiftRight(string s, int n) {
+	string res = s.substr(0, s.length() - n);
+	for (int i = 0; i < n; i++) {
+		res = '0' + res;
+	}
+	return res;
+}
+
+string rolRight(string s, int n) {
+	int slength = s.length();
+	string res = s.substr(slength - n, slength);
+	res = res + s.substr(0, slength - n);
+	return res;
+}
+
+string rolLeft(string s, int n) {
+	int slength = s.length();
+	string res = s.substr(0, n);
+
+	res = s.substr(n, slength) + res;
 	return res;
 }

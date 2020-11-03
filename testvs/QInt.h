@@ -34,7 +34,7 @@ public:
 	//CONVERT
 public:
 
-	static bool* DecToBin(QInt x);
+	static bool* DecToBin(QInt x, int n=128);
 	static QInt BinToDec(bool* bit);
 	static string BinToHex(bool* bit);
 	static string DecToHex(QInt x);
@@ -81,6 +81,16 @@ public:
 	bool isNegative();
 	//true if Qint is equal to 0
 	bool isZero();
+	void tobin() {
+		bool*bits = DecToBin(*this);
+		cout << "\ntobin:\n";
+		for (int i = 0; i < 128; i++) {
+			cout << bits[i];
+		}
+		cout << endl;
+		delete[]bits;
+	}
+
 };
 
 

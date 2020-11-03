@@ -324,9 +324,20 @@ QInt QInt::operator~() {
 QInt QInt::operator<<(int n) {
 	bool* b = DecToBin(*this);
 	bool bits[128] = { 0 };
-
-	for (int i = n; i < 128; i++)
+	cout << "\noper<<\n";
+	for (int i = n; i < 128; i++) {
 		bits[i - n] = b[i];
+	}
+	cout << "\n bam dau<<\n";
+	for (int i = 0; i < 128; i++) {
+		cout << b[i];
+	}
+	cout << "\n operator<<\n";
+	for (int i = 0; i < 128; i++) {
+		cout << bits[i];
+	}
+	cout << endl;
+
 	return BinToDec(bits);
 }
 
@@ -378,7 +389,7 @@ QInt QInt::ror(int n) {
 
 //CONVERT FUNCTIONS
 //Chuyển đổi từ hệ 10 -> 2
-bool* QInt::DecToBin(QInt q) {
+bool* QInt::DecToBin(QInt q, int n) {
 	bool* b = new bool[128];
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 32; j++) {
@@ -513,8 +524,8 @@ bool* QInt::HexToBin(string hexdec) {
 		}
 		i++;
 	}
-
 	bool *b = binStringToBinArray(res);
+
 	return b;
 }
 
@@ -559,8 +570,8 @@ string QInt::toString() {
 //Kiểm tra một chuỗi ký tự số có âm không
 //VD "-123456"
 bool QInt::isNegative() {
-	
-	return ((this->num[0] >> 31) &1);
+
+	return ((this->num[0] >> 31) & 1);
 }
 
 

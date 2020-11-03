@@ -72,11 +72,12 @@ string half_pow_num(int n);
 //add_two_flt_string("125","0625")-->"1875"
 //(2^-3 + 2^-4 == 0.1875)
 string add_two_flt_string(string s1, string s2);
-
-
-
-
-
-
+//shift left string
+string shiftLeft(string, int);
+//shift right string
+string shiftRight(string, int);
+string rolLeft(string, int);
+//shift right string
+string rolRight(string, int);
 
 #endif

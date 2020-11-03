@@ -52,16 +52,20 @@ string processQInt(string strIn)
 				q2 = QInt(num2);
 		}
 		else {
+
 			if (num1.length() > 0)
 				q1 = QInt::HexToDec(num1);
+
 			if (num2.length() > 0)
 				q2 = QInt::HexToDec(num2);
+
 		}
 
 		if (oper == "~")
 		{
 			res = (~q1);
 		}
+
 		else if (oper == "+")
 		{
 			res = (q1 + q2);
@@ -69,6 +73,7 @@ string processQInt(string strIn)
 		}
 		else if (oper == "-")
 		{
+
 			res = (q1 - q2);
 
 		}
@@ -107,20 +112,35 @@ string processQInt(string strIn)
 		}
 		else if (oper == "<<")
 		{
-			res = q1 << stoi(num2);
-
+			if (p1 == "2") {
+				return shiftLeft(num1, stoi(num2));
+			}
+			else
+				res = q1 << stoi(num2);
 		}
 		else if (oper == ">>")
 		{
-			res = q1 >> stoi(num2);
+			if (p1 == "2") {
+				return shiftLeft(num1, stoi(num2));
+			}
+			else
+				res = q1 >> stoi(num2);
 		}
 		else if (oper == "rol")
 		{
-			res = q1.rol(stoi(num2));
+			if (p1 == "2") {
+				return rolLeft(num1, stoi(num2));
+			}
+			else
+				res = q1.rol(stoi(num2));
 		}
 		else if (oper == "ror")
 		{
-			res = q1.ror(stoi(num2));
+			if (p1 == "2") {
+				return rolRight(num1, stoi(num2));
+			}
+			else
+				res = q1.ror(stoi(num2));
 
 		}
 		else if (oper == "<")
@@ -155,7 +175,7 @@ string processQInt(string strIn)
 		}
 		else {
 			string hex = QInt::DecToHex(res);
-			return standardizeString(hex);
+			return removeHeadZero(hex);
 		}
 	}
 
@@ -174,13 +194,13 @@ string processQInt(string strIn)
 			else if (base2 == 16) {
 				//dextohex
 				string res = QInt::DecToHex(num1);
-				return standardizeString(res);
+				return removeHeadZero(res);
 			}
 		}
 
 		else if (base1 == 2) {
 			//bintodex
-			bool *b=binStringToBinArray(num1);
+			bool *b = binStringToBinArray(num1);
 			if (base2 == 10) {
 				string res = QInt::BinToDec(b).toString();
 				delete[]b;
@@ -189,14 +209,14 @@ string processQInt(string strIn)
 			else if (base2 == 16) {
 				//bintohex
 				string res = QInt::BinToHex(b);
-				return standardizeString(res);
+				return removeHeadZero(res);
 			}
 		}
 
 
 		else if (base1 == 16) {
 			if (base2 == 10) {
-			//HexToDec
+				//HexToDec
 				return QInt::HexToDec(num1).toString();
 			}
 
@@ -238,7 +258,7 @@ string processQFloat(string strIn)
 		delete[]b;
 		return standardizeString(res);
 	}
-	else if(base1 == 2 && base2 == 10) {
+	else if (base1 == 2 && base2 == 10) {
 		//bintodec
 		bool* bits = binStringToBinArray(num);
 		string res = Qfloat::BinToDec(bits).toString();
