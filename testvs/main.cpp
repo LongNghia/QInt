@@ -10,8 +10,6 @@ int main(int argc, char** argv)
 {
 	string inPath, outPath, mode;
 
-	argc = 4;
-
 
 	if (argc < 4) {
 		cout << "Require 4 arguments!\n";
@@ -51,16 +49,6 @@ int main(int argc, char** argv)
 		else cout << "Unable to open file";
 	}
 
-	getch();
 	return 0;
 }
 
-
-int main2(){
-	//Qfloat a = Qfloat::BinToDec(binStringToBinArray("01000000000000111010011111111111111111111111110001110000010011001111000101010111010000101111011101000101010110001011100100010100"));
-	//a.PrintQfloat();
-
-	Qfloat a("s");
-	cout << binArrayToBinString(Qfloat::DecToBin(a));
-	return 0;
-}

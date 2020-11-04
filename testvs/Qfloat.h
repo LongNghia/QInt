@@ -12,8 +12,6 @@ public:
 	Qfloat(string);
 	Qfloat(char* );
 public:
-	
-
 	//Hàm Nhập
 	void ScanQfloat(string s);
 	//Hàm xuất
@@ -24,7 +22,6 @@ public:
 
 	//Hàm chuyển đổi số Qfloat thập phân sang nhị phân
 	static bool *DecToBin(Qfloat x);
-
 
 public:
 	string toString();

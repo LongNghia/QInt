@@ -81,16 +81,6 @@ public:
 	bool isNegative();
 	//true if Qint is equal to 0
 	bool isZero();
-	void tobin() {
-		bool*bits = DecToBin(*this);
-		cout << "\ntobin:\n";
-		for (int i = 0; i < 128; i++) {
-			cout << bits[i];
-		}
-		cout << endl;
-		delete[]bits;
-	}
-
 };
 
 

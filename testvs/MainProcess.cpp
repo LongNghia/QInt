@@ -84,16 +84,16 @@ string processQInt(string strIn)
 		}
 		else if (oper == "/")
 		{
-			//try {
-			//	cout << "trying to divide\n";
-			//	res = q1 / q2;
-			//	cout << "done \n";
+			try {
+				cout << "trying to divide\n";
+				res = q1 / q2;
+				cout << "done \n";
 
-			//}
-			//catch (runtime_error& e) {
-			//	cout << "exception occurred" << endl
-			//		<< e.what();
-			//}
+			}
+			catch (runtime_error& e) {
+				cout << "exception occurred" << endl
+					<< e.what();
+			}
 			res = q1 / q2;
 		}
 		else if (oper == "&")

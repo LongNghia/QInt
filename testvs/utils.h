@@ -33,10 +33,13 @@ string binToQInt(bool* bits, int n=128);
 
 // "1010"-->[1,0,1,0]
 bool* binStringToBinArray(string s);
+
 //[1,0,1,0]-->"1010"
 string binArrayToBinString(bool* bits, int n=128);
+
 //[1,0,1,1] => 11
 int BinArrayToInt(bool *, int n = 32);
+
 //12 --> "1100"
 string IntToBin(int num, int n = 128);
 
@@ -50,13 +53,15 @@ string standardizeString(string);
 
 //kiểm tra 1 kí tự có phải là digit
 bool isDigit(char);
+
 //remove kí tự đặc biệt ex: "12!@3" --> "123"
 string remove_non_digits(const string);
+
 //"00000"===0
 bool isBinStringZero(string);
+
 //kiểm tra chuỗi digit là 0 (có dấu)
 bool isIntStringZero(string);
-
 
 
 //-----TÍNH TOÁN VỚI CHUỖI
@@ -72,12 +77,16 @@ string half_pow_num(int n);
 //add_two_flt_string("125","0625")-->"1875"
 //(2^-3 + 2^-4 == 0.1875)
 string add_two_flt_string(string s1, string s2);
+
 //shift left string
 string shiftLeft(string, int);
+
 //shift right string
 string shiftRight(string, int);
+
 string rolLeft(string, int);
 //shift right string
+
 string rolRight(string, int);
 
 #endif
